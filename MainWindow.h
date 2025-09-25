@@ -14,6 +14,7 @@
 #include <QStatusBar>
 #include "WeatherService.h"
 #include "WeatherChartWidget.h"
+#include "simplemapwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -85,7 +86,7 @@ private:
     //Section
     // === SECTION GRAPHIQUE ===
     QGroupBox* m_chartGroup;
-    QVBoxLayout* m_chartLayout;
+    QHBoxLayout* m_chartLayout;
 
     // Section état/debug
     QGroupBox* m_statusGroup;
@@ -97,6 +98,10 @@ private:
     WeatherService* m_weatherService;
     // chart
     WeatherChartWidget* m_chartWidget;
+    // maps
+    // Dans private:
+    SimpleMapWidget* m_mapWidget;
+
     // État
     QString m_currentCity;
     bool m_isLoading;
