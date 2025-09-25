@@ -166,6 +166,9 @@ void MainWindow::setupConnections()
 
     connect(m_weatherService, &WeatherService::cacheUpdated,
             this, &MainWindow::onCacheUpdated);
+
+    connect(m_weatherService, &WeatherService::forecastReady,
+            m_chartWidget, &WeatherChartWidget::onForecastDataReceived);
 }
 
 void MainWindow::setupStatusBar()

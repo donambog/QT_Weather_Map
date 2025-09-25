@@ -1,4 +1,4 @@
-#include "weatherchartwidget.h"
+#include "WeatherChartWidget.h"
 #include <QDebug>
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
@@ -65,13 +65,19 @@ void WeatherChartWidget::setupSeries()
     m_temperatureSeries = new QSplineSeries();
     m_temperatureSeries->setName("Température (°C)");
     m_temperatureSeries->setColor(m_temperatureColor);
-    m_temperatureSeries->setWidth(3);
+    // Qt 6 : utiliser QPen pour définir l'épaisseur
+    QPen tempPen(m_temperatureColor);
+    tempPen.setWidth(3);
+    m_temperatureSeries->setPen(tempPen);
 
     // Série humidité (courbe lisse bleue)
     m_humiditySeries = new QSplineSeries();
     m_humiditySeries->setName("Humidité (%)");
     m_humiditySeries->setColor(m_humidityColor);
-    m_humiditySeries->setWidth(3);
+    // Qt 6 : utiliser QPen pour définir l'épaisseur
+    QPen humidityPen(m_humidityColor);
+    humidityPen.setWidth(3);
+    m_humiditySeries->setPen(humidityPen);
 
     // Ajouter les séries au graphique
     m_chart->addSeries(m_temperatureSeries);
@@ -85,7 +91,7 @@ void WeatherChartWidget::setupAxes()
     m_axisX->setTitleText("Temps");
     m_axisX->setFormat("dd/MM hh:mm");
     m_axisX->setLabelsAngle(-45); // Labels inclinés pour lisibilité
-    m_axisX->setTickCount(6);     // 6 points de temps visibles
+    m_axisX->setTickCount(5);     // 6 points de temps visibles
 
     // Axe Y gauche : Température
     m_axisTemperature = new QValueAxis();
