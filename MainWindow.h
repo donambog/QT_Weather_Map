@@ -13,7 +13,6 @@
 #include <QGridLayout>
 #include <QStatusBar>
 #include "WeatherService.h"
-#include "WeatherChartWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -82,11 +81,6 @@ private:
     QVBoxLayout* m_forecastLayout;
     QTextEdit* m_forecastDisplay;
 
-    //Section
-    // === SECTION GRAPHIQUE ===
-    QGroupBox* m_chartGroup;
-    QVBoxLayout* m_chartLayout;
-
     // Section état/debug
     QGroupBox* m_statusGroup;
     QVBoxLayout* m_statusLayout;
@@ -95,8 +89,7 @@ private:
 
     // Service météo
     WeatherService* m_weatherService;
-    // chart
-    WeatherChartWidget* m_chartWidget;
+
     // État
     QString m_currentCity;
     bool m_isLoading;

@@ -12,14 +12,12 @@ SOURCES += \
     configloader.cpp \
     main.cpp \
     mainwindow.cpp \
-    weatherchartwidget.cpp \
     weatherservice.cpp
 
 HEADERS += \
     WeatherData.h \
     configloader.h \
     mainwindow.h \
-    weatherchartwidget.h \
     weatherservice.h
 
 # Default rules for deployment.
