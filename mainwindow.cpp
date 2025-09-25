@@ -1,6 +1,5 @@
 #include "configloader.h"
 #include "MainWindow.h"
-#include "weatherchartwidget.h"
 #include <QApplication>
 #include <QMessageBox>
 #include <QDateTime>
@@ -114,14 +113,6 @@ void MainWindow::setupUI()
     m_forecastLayout->addWidget(m_forecastDisplay);
 
     m_mainLayout->addWidget(m_forecastGroup);
-    // === SECTION GRAPHIQUE ===
-    m_chartGroup = new QGroupBox("Graphique Évolution 5 Jours", this);
-    m_chartLayout = new QVBoxLayout(m_chartGroup);
-
-    m_chartWidget = new WeatherChartWidget(this);
-    m_chartLayout->addWidget(m_chartWidget);
-
-    m_mainLayout->addWidget(m_chartGroup);
     // === SECTION ÉTAT/DEBUG ===
     m_statusGroup = new QGroupBox("État & Logs", this);
     m_statusLayout = new QVBoxLayout(m_statusGroup);
