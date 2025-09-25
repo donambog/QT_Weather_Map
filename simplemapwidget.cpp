@@ -105,31 +105,6 @@ void SimpleMapWidget::updateLocationDisplay()
     m_locationLabel->setText(QString("%1, %2").arg(m_currentCity).arg("--"));
     // Coordonnées formatées
     m_coordsLabel->setText(formatCoordinates(m_latitude, m_longitude));
-
-    // Information contextuelle selon la position
-    QString hemisphere;
-    if (m_latitude > 0) hemisphere += "Nord";
-    else hemisphere += "Sud";
-
-    if (m_longitude > 0) hemisphere += "-Est";
-    else hemisphere += "-Ouest";
-
-    m_infoLabel->setText(QString("Hémisphère %1").arg(hemisphere));
-
-    // Style selon la latitude (couleur indicative)
-    if (m_latitude > 60) {
-        // Région arctique
-        setStyleSheet("SimpleMapWidget { border: 1px solid gray; background: #E6F3FF; border-radius: 5px; }");
-    } else if (m_latitude > 30) {
-        // Région tempérée
-        setStyleSheet("SimpleMapWidget { border: 1px solid gray; background: #F0F8FF; border-radius: 5px; }");
-    } else if (m_latitude > -30) {
-        // Région tropicale
-        setStyleSheet("SimpleMapWidget { border: 1px solid gray; background: #FFF8E1; border-radius: 5px; }");
-    } else {
-        // Région australe
-        setStyleSheet("SimpleMapWidget { border: 1px solid gray; background: #F0F8FF; border-radius: 5px; }");
-    }
 }
 
 QString SimpleMapWidget::formatCoordinates(double latitude, double longitude) const
