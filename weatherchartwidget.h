@@ -14,7 +14,7 @@
 #include <QDateTime>
 #include "WeatherData.h"
 
-QT_CHARTS_USE_NAMESPACE
+
 
     /**
  * Widget affichant un graphique de l'évolution de la température
