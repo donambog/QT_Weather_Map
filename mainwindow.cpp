@@ -18,8 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_weatherService = new WeatherService(this);
 
     // Set the API key
-    //m_weatherService->setApiKey("d9e4708f4f732c05626ac37291b86059");
-    // Charge le cle par json
+    // Charge la cle par json
     ConfigLoader config;
     if (config.loadConfig()) {
         // Configuration OK
@@ -35,8 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     setupConnections();
 
-    setWindowTitle("Application Météo - Test Architecture");
-    resize(800, 600);
+    setWindowTitle("Application Météo ");
+    resize(1200, 900);
 
     // Message d'accueil
     m_logDisplay->append("=== Application Météo Démarrée ===");
@@ -113,6 +112,22 @@ void MainWindow::setupUI()
     m_forecastLayout->addWidget(m_forecastDisplay);
 
     m_mainLayout->addWidget(m_forecastGroup);
+
+    // === SECTION GRAPHIQUE ===
+
+    m_chartGroup = new QGroupBox("Graphique Évolution 5 Jours et Maps", this);
+    m_chartLayout = new QHBoxLayout(m_chartGroup);
+
+    // Widget graphique (côté gauche)
+    m_chartWidget = new WeatherChartWidget(this);
+    m_chartLayout->addWidget(m_chartWidget);
+
+    // Widget carte (côté droit) - À créer
+    m_mapWidget = new SimpleMapWidget(this);
+    m_chartLayout->addWidget(m_mapWidget);
+
+    m_mainLayout->addWidget(m_chartGroup);
+
     // === SECTION ÉTAT/DEBUG ===
     m_statusGroup = new QGroupBox("État & Logs", this);
     m_statusLayout = new QVBoxLayout(m_statusGroup);
@@ -157,6 +172,12 @@ void MainWindow::setupConnections()
 
     connect(m_weatherService, &WeatherService::cacheUpdated,
             this, &MainWindow::onCacheUpdated);
+
+    connect(m_weatherService, &WeatherService::forecastReady,
+            m_chartWidget, &WeatherChartWidget::onForecastDataReceived);
+
+    connect(m_weatherService, &WeatherService::currentWeatherReady,
+            m_mapWidget, &SimpleMapWidget::onWeatherDataReceived);
 }
 
 void MainWindow::setupStatusBar()
