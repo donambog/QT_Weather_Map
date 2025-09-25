@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<ForecastData>("ForecastData");
     qRegisterMetaType<ForecastEntry>("ForecastEntry");
 
-    // Créer dossier cache si nécessaire
+    // Créer dossier cache
     QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     QDir().mkpath(cacheDir);
     qDebug() << "Cache directory:" << cacheDir;
