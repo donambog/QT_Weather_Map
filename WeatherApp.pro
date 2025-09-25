@@ -12,6 +12,7 @@ SOURCES += \
     configloader.cpp \
     main.cpp \
     mainwindow.cpp \
+    simplemapwidget.cpp \
     weatherchartwidget.cpp \
     weatherservice.cpp
 
@@ -19,6 +20,7 @@ HEADERS += \
     WeatherData.h \
     configloader.h \
     mainwindow.h \
+    simplemapwidget.h \
     weatherchartwidget.h \
     weatherservice.h
 
