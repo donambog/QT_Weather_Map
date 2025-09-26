@@ -16,7 +16,7 @@
 
 
 
-    /**
+/**
  * Widget affichant un graphique de l'évolution de la température
  * et de l'humidité sur 5 jours
  *

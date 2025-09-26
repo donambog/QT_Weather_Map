@@ -124,8 +124,6 @@ private:
     WeatherService* m_weatherService;
     // chart
     WeatherChartWidget* m_chartWidget;
-    //SimpleMapWidget* m_mapWidget;
-
 
     // État
     QString m_currentCity;
