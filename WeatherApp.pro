@@ -1,4 +1,4 @@
-QT       += core gui network charts
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,7 +12,6 @@ SOURCES += \
     configloader.cpp \
     main.cpp \
     mainwindow.cpp \
-    simplemapwidget.cpp \
     weatherchartwidget.cpp \
     weatherservice.cpp
 
@@ -20,7 +19,6 @@ HEADERS += \
     WeatherData.h \
     configloader.h \
     mainwindow.h \
-    simplemapwidget.h \
     weatherchartwidget.h \
     weatherservice.h
 

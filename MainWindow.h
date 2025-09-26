@@ -8,6 +8,9 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QTextEdit>
+#include <QTabWidget>
+#include <QListWidget>
+#include <QPushButton>
 #include <QProgressBar>
 #include <QGroupBox>
 #include <QGridLayout>
@@ -56,16 +59,31 @@ private:
     QString formatWindSpeed(double speed) const;
     QString formatTime(const QDateTime& dateTime) const;
 
+    // Méthodes de configuration UI
+    void setupLeftPanel();
+    void setupRightPanel();
+    void setupSearchSection();
+    void setupCurrentWeatherSection();
+    void setupForecastSection();
+    void setupChartSection();
+    void setupStatusSection();
+    void setupHistorySection();
+    void setupMapSection();
+
+    // Méthodes utilitaires UI
+    void createWeatherLabels();
+    void arrangeWeatherLabels();
+
     // Widgets principaux
     QWidget* m_centralWidget;
-    QVBoxLayout* m_mainLayout;
+    QVBoxLayout* m_mainLeftLayout;
+    QVBoxLayout* m_mainRightLayout;
 
     // Section recherche
     QGroupBox* m_searchGroup;
     QHBoxLayout* m_searchLayout;
     QLineEdit* m_cityInput;
-    QPushButton* m_searchButton;
-    QPushButton* m_clearCacheButton;
+    QPushButton* m_clearCacheButton, * m_searchButton, *m_clearHistoryButton;
 
     // Section météo actuelle
     QGroupBox* m_currentWeatherGroup;
@@ -89,6 +107,13 @@ private:
     QGroupBox* m_chartGroup;
     QHBoxLayout* m_chartLayout;
 
+    // section Favoris
+    QTabWidget* m_historyTabWidget;
+    QListWidget* m_recentSearchList, *m_favoritesSearchList;
+    QPushButton* m_addFavoriteButton, *m_removeFavoriteButton;
+    QLabel* m_recentStatsLabel, *m_favoritesStatsLabel;
+
+
     // Section état/debug
     QGroupBox* m_statusGroup;
     QVBoxLayout* m_statusLayout;
@@ -99,7 +124,7 @@ private:
     WeatherService* m_weatherService;
     // chart
     WeatherChartWidget* m_chartWidget;
-    SimpleMapWidget* m_mapWidget;
+    //SimpleMapWidget* m_mapWidget;
 
 
     // État
