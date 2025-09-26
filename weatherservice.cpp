@@ -1,4 +1,5 @@
 #include "WeatherService.h"
+#include "weathererrors.h"
 #include <QDebug>
 #include <QJsonValue>
 #include <QNetworkRequest>
@@ -441,38 +442,38 @@ QString WeatherService::getErrorMessage(QNetworkReply::NetworkError error) const
 {
     switch (error) {
     case QNetworkReply::ConnectionRefusedError:
-        return "Connexion refusée - Vérifiez votre connexion internet";
+        return WeatherErrors::CONNECTION_REFUSED;
     case QNetworkReply::RemoteHostClosedError:
-        return "Serveur météo indisponible";
+        return WeatherErrors::REMOTE_HOST_CLOSED;
     case QNetworkReply::HostNotFoundError:
-        return "Serveur météo introuvable";
+        return WeatherErrors::HOST_NOT_FOUND;
     case QNetworkReply::TimeoutError:
-        return "Délai d'attente dépassé";
+        return WeatherErrors::TIMEOUT;
     case QNetworkReply::SslHandshakeFailedError:
-        return "Erreur de sécurité SSL";
+        return WeatherErrors::SSL_HANDSHAKE;
     case QNetworkReply::AuthenticationRequiredError:
-        return "Clé API invalide";
+        return WeatherErrors::AUTHENTICATION;
     default:
-        return "Erreur réseau inconnue";
+        return WeatherErrors::NETWORK_UNKNOWN;
     }
 }
 
 QString WeatherService::getApiErrorMessage(const QJsonObject& json) const
 {
+    using namespace WeatherErrors;
+
     int cod = json["cod"].toInt();
     QString message = json["message"].toString();
 
     switch (cod) {
-    case 401:
-        return "Clé API invalide";
-    case 404:
-        return "Ville introuvable";
-    case 429:
-        return "Quota d'API dépassé";
-    case 500:
-        return "Erreur serveur météo";
+    case ApiCodes::UNAUTHORIZED:     return ApiMessages::UNAUTHORIZED;
+    case ApiCodes::NOT_FOUND:        return ApiMessages::NOT_FOUND;
+    case ApiCodes::TOO_MANY_REQUESTS: return ApiMessages::TOO_MANY_REQUESTS;
+    case ApiCodes::INTERNAL_ERROR:   return ApiMessages::INTERNAL_ERROR;
+    case ApiCodes::BAD_REQUEST:      return ApiMessages::BAD_REQUEST;
+    case ApiCodes::SERVICE_UNAVAILABLE: return ApiMessages::SERVICE_UNAVAILABLE;
     default:
-        return message.isEmpty() ? "Erreur API inconnue" : message;
+        return message.isEmpty() ? ApiMessages::UNKNOWN : message;
     }
 }
 

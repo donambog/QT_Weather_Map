@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui network charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,6 +20,7 @@ HEADERS += \
     configloader.h \
     mainwindow.h \
     weatherchartwidget.h \
+    weathererrors.h \
     weatherservice.h
 
 # Default rules for deployment.
