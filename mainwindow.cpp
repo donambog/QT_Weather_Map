@@ -51,9 +51,173 @@ void MainWindow::setupUI()
 {
     m_centralWidget = new QWidget(this);
     setCentralWidget(m_centralWidget);
-    m_mainLayout = new QVBoxLayout(m_centralWidget);
 
-    // === SECTION RECHERCHE ===
+    // Layout principal horizontal qu on va diviser en 2
+    QHBoxLayout* mainHorizontalLayout = new QHBoxLayout(m_centralWidget);
+
+    // === PARTIE GAUCHE ===
+    QWidget* leftWidget = new QWidget();
+    m_mainLeftLayout = new QVBoxLayout(leftWidget);
+    setupLeftPanel();
+
+    // === PARTIE DROITE ===
+    QWidget* rightWidget = new QWidget();
+    m_mainRightLayout = new QVBoxLayout(rightWidget);
+    setupRightPanel();
+
+    // === ASSEMBLAGE FINAL ===
+    mainHorizontalLayout->addWidget(leftWidget, 2);  // 2/3 de la largeur
+    mainHorizontalLayout->addWidget(rightWidget, 1); // 1/3 de la largeur
+}
+
+void MainWindow::setupLeftPanel()
+{
+    setupSearchSection();
+    setupCurrentWeatherSection();
+    setupForecastSection();
+    setupChartSection();
+    setupStatusSection();
+}
+
+void MainWindow::setupRightPanel()
+{
+    setupHistorySection();
+    setupMapSection();
+    // Espaceur pour centrer le contenu
+    //m_mainRightLayout->addStretch();
+}
+
+void MainWindow::setupMapSection()
+{
+    // Groupe principal pour la carte
+    QGroupBox* mapGroup = new QGroupBox("Carte Météo", this);
+    QVBoxLayout* mapGroupLayout = new QVBoxLayout(mapGroup);
+
+    // Placeholder pour la carte
+    QLabel* mapPlaceholder = new QLabel("Zone Carte\nLa carte sera intégrée ici", this);
+    mapPlaceholder->setAlignment(Qt::AlignCenter);
+    mapPlaceholder->setMinimumHeight(250);
+    mapPlaceholder->setStyleSheet(
+        "border: 2px dashed #95a5a6;"
+        "color: #7f8c8d;"
+        "font-size: 14px;"
+        "padding: 40px;"
+        "border-radius: 8px;"
+        "background: #ecf0f1;"
+        );
+
+    mapGroupLayout->addWidget(mapPlaceholder);
+    m_mainRightLayout->addWidget(mapGroup,2);
+}
+
+void MainWindow::setupHistorySection()
+{
+    // Groupe principal pour l'historique
+    QGroupBox* historyGroup = new QGroupBox("Historique des recherches", this);
+    QVBoxLayout* historyGroupLayout = new QVBoxLayout(historyGroup);
+
+    // Widget à onglets
+    m_historyTabWidget = new QTabWidget(this);
+
+    // === ONGLET RÉCENT ===
+    QWidget* recentTab = new QWidget();
+    QVBoxLayout* recentLayout = new QVBoxLayout(recentTab);
+
+    // Liste des recherches récentes
+    m_recentSearchList = new QListWidget(this);
+    m_recentSearchList->setMaximumHeight(200);
+    m_recentSearchList->setStyleSheet(
+        "QListWidget { border: 1px solid #ccc; border-radius: 4px; }"
+        "QListWidget::item { padding: 8px; border-bottom: 1px solid #eee; }"
+        "QListWidget::item:hover { background-color: #f0f8ff; }"
+        "QListWidget::item:selected { background-color: #3498db; color: white; }"
+        );
+
+    // Label statistiques récent
+    m_recentStatsLabel = new QLabel("Aucune recherche récente", this);
+    m_recentStatsLabel->setStyleSheet("color: #666; font-size: 11px; margin-top: 5px;");
+    m_recentStatsLabel->setAlignment(Qt::AlignCenter);
+
+    recentLayout->addWidget(m_recentSearchList);
+    recentLayout->addWidget(m_recentStatsLabel);
+
+    // === ONGLET FAVORIS ===
+    QWidget* favoritesTab = new QWidget();
+    QVBoxLayout* favoritesLayout = new QVBoxLayout(favoritesTab);
+
+    // Liste des favoris
+    m_favoritesSearchList = new QListWidget(this);
+    m_favoritesSearchList->setMaximumHeight(150);
+    m_favoritesSearchList->setStyleSheet(
+        "QListWidget { border: 1px solid #ccc; border-radius: 4px; }"
+        "QListWidget::item { padding: 8px; border-bottom: 1px solid #eee; }"
+        "QListWidget::item:hover { background-color: #fff3cd; }"
+        "QListWidget::item:selected { background-color: #f39c12; color: white; }"
+        );
+
+    // Boutons de gestion des favoris
+    QHBoxLayout* favoritesButtonLayout = new QHBoxLayout();
+
+    m_addFavoriteButton = new QPushButton("⭐ Ajouter aux favoris", this);
+    m_addFavoriteButton->setStyleSheet(
+        "QPushButton { background-color: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 4px; }"
+        "QPushButton:hover { background-color: #e67e22; }"
+        "QPushButton:disabled { background-color: #bdc3c7; }"
+        );
+    m_addFavoriteButton->setEnabled(false); // Désactivé par défaut
+
+    m_removeFavoriteButton = new QPushButton("🗑️ Supprimer", this);
+    m_removeFavoriteButton->setStyleSheet(
+        "QPushButton { background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; }"
+        "QPushButton:hover { background-color: #c0392b; }"
+        "QPushButton:disabled { background-color: #bdc3c7; }"
+        );
+    m_removeFavoriteButton->setEnabled(false);
+
+    favoritesButtonLayout->addWidget(m_addFavoriteButton);
+    favoritesButtonLayout->addWidget(m_removeFavoriteButton);
+    favoritesButtonLayout->addStretch();
+
+    // Label statistiques favoris
+    m_favoritesStatsLabel = new QLabel("Aucun favori", this);
+    m_favoritesStatsLabel->setStyleSheet("color: #666; font-size: 11px; margin-top: 5px;");
+    m_favoritesStatsLabel->setAlignment(Qt::AlignCenter);
+
+    favoritesLayout->addWidget(m_favoritesSearchList);
+    favoritesLayout->addLayout(favoritesButtonLayout);
+    favoritesLayout->addWidget(m_favoritesStatsLabel);
+
+    // === AJOUT DES ONGLETS ===
+    m_historyTabWidget->addTab(recentTab, "Récent");
+    m_historyTabWidget->addTab(favoritesTab, "⭐ Favoris");
+    m_historyTabWidget->setCurrentIndex(0); // Onglet récent par défaut
+
+    // === CONTRÔLES GÉNÉRAUX ===
+    QHBoxLayout* controlsLayout = new QHBoxLayout();
+
+    m_clearHistoryButton = new QPushButton("Vider historique", this);
+    m_clearHistoryButton->setStyleSheet(
+        "QPushButton { background-color: #95a5a6; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; }"
+        "QPushButton:hover { background-color: #7f8c8d; }"
+        );
+
+    controlsLayout->addStretch();
+    controlsLayout->addWidget(m_clearHistoryButton);
+
+    // === ASSEMBLAGE FINAL ===
+    historyGroupLayout->addWidget(m_historyTabWidget);
+    historyGroupLayout->addLayout(controlsLayout);
+
+    m_mainRightLayout->addWidget(historyGroup,1);
+
+    // === CONNEXIONS DES SIGNAUX ===
+    //setupHistoryConnections();
+
+    // === INITIALISATION DES DONNÉES ===
+    //refreshHistoryDisplay();
+}
+void MainWindow::setupSearchSection()
+{
     m_searchGroup = new QGroupBox("Recherche Ville", this);
     m_searchLayout = new QHBoxLayout(m_searchGroup);
 
@@ -69,13 +233,26 @@ void MainWindow::setupUI()
     m_searchLayout->addWidget(m_cityInput);
     m_searchLayout->addWidget(m_searchButton);
     m_searchLayout->addWidget(m_clearCacheButton);
-    m_mainLayout->addWidget(m_searchGroup);
 
-    // === SECTION MÉTÉO ACTUELLE ===
+    m_mainLeftLayout->addWidget(m_searchGroup);
+}
+
+void MainWindow::setupCurrentWeatherSection()
+{
     m_currentWeatherGroup = new QGroupBox("Météo Actuelle", this);
     m_currentWeatherLayout = new QGridLayout(m_currentWeatherGroup);
 
-    // Labels pour affichage
+    // Création des labels
+    createWeatherLabels();
+
+    // Organisation en grille
+    arrangeWeatherLabels();
+
+    m_mainLeftLayout->addWidget(m_currentWeatherGroup);
+}
+
+void MainWindow::createWeatherLabels()
+{
     m_cityNameLabel = new QLabel("Ville: -", this);
     m_cityNameLabel->setStyleSheet("font-weight: bold; font-size: 14px;");
 
@@ -87,10 +264,13 @@ void MainWindow::setupUI()
     m_humidityLabel = new QLabel("Humidité: -", this);
     m_pressureLabel = new QLabel("Pression: -", this);
     m_windLabel = new QLabel("Vent: -", this);
+
     m_timestampLabel = new QLabel("Dernière mise à jour: -", this);
     m_timestampLabel->setStyleSheet("font-size: 10px; color: gray;");
+}
 
-    // Organisation en grille
+void MainWindow::arrangeWeatherLabels()
+{
     m_currentWeatherLayout->addWidget(m_cityNameLabel, 0, 0, 1, 2);
     m_currentWeatherLayout->addWidget(m_temperatureLabel, 1, 0);
     m_currentWeatherLayout->addWidget(m_feelsLikeLabel, 1, 1);
@@ -99,36 +279,35 @@ void MainWindow::setupUI()
     m_currentWeatherLayout->addWidget(m_pressureLabel, 3, 0);
     m_currentWeatherLayout->addWidget(m_windLabel, 3, 1);
     m_currentWeatherLayout->addWidget(m_timestampLabel, 4, 0, 1, 2);
+}
 
-    m_mainLayout->addWidget(m_currentWeatherGroup);
-
-    // === SECTION PRÉVISIONS ===
+void MainWindow::setupForecastSection()
+{
     m_forecastGroup = new QGroupBox("Prévisions 5 Jours (Résumé)", this);
     m_forecastLayout = new QVBoxLayout(m_forecastGroup);
 
     m_forecastDisplay = new QTextEdit(this);
     m_forecastDisplay->setMaximumHeight(150);
     m_forecastDisplay->setPlaceholderText("Les prévisions apparaîtront ici...");
+
     m_forecastLayout->addWidget(m_forecastDisplay);
+    m_mainLeftLayout->addWidget(m_forecastGroup);
+}
 
-    m_mainLayout->addWidget(m_forecastGroup);
-
-    // === SECTION GRAPHIQUE ===
-
+void MainWindow::setupChartSection()
+{
     m_chartGroup = new QGroupBox("Graphique Évolution 5 Jours et Maps", this);
     m_chartLayout = new QHBoxLayout(m_chartGroup);
 
-    // Widget graphique (côté gauche)
+    // Widget graphique
     m_chartWidget = new WeatherChartWidget(this);
     m_chartLayout->addWidget(m_chartWidget);
 
-    // Widget carte (côté droit) - À créer
-    m_mapWidget = new SimpleMapWidget(this);
-    m_chartLayout->addWidget(m_mapWidget);
+    m_mainLeftLayout->addWidget(m_chartGroup);
+}
 
-    m_mainLayout->addWidget(m_chartGroup);
-
-    // === SECTION ÉTAT/DEBUG ===
+void MainWindow::setupStatusSection()
+{
     m_statusGroup = new QGroupBox("État & Logs", this);
     m_statusLayout = new QVBoxLayout(m_statusGroup);
 
@@ -142,7 +321,7 @@ void MainWindow::setupUI()
 
     m_statusLayout->addWidget(m_loadingBar);
     m_statusLayout->addWidget(m_logDisplay);
-    m_mainLayout->addWidget(m_statusGroup);
+    m_mainLeftLayout->addWidget(m_statusGroup);
 }
 
 void MainWindow::setupConnections()
@@ -175,9 +354,6 @@ void MainWindow::setupConnections()
 
     connect(m_weatherService, &WeatherService::forecastReady,
             m_chartWidget, &WeatherChartWidget::onForecastDataReceived);
-
-    connect(m_weatherService, &WeatherService::currentWeatherReady,
-            m_mapWidget, &SimpleMapWidget::onWeatherDataReceived);
 }
 
 void MainWindow::setupStatusBar()
