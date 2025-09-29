@@ -57,7 +57,7 @@ void WeatherService::requestCurrentWeather(const QString& cityName)
     }
 
     // Vérification cache d'abord
-    if (hasValidCache(cityName)) {
+    if (cacheMgrPtr->isValid(cityName, "weather")) {
         qDebug() << "Cache hit for" << cityName;
         emit currentWeatherReady(cityName, m_weatherCache[cityName].weatherData);
         return;
@@ -179,7 +179,7 @@ void WeatherService::onCurrentWeatherReceived()
     }
 
     // Mise en cache et émission signal
-    storeCachedWeather(cityName, weatherData);
+    cacheMgrPtr->storeCachedWeather(cityName, weatherData);
     emit currentWeatherReady(cityName, weatherData);
     emit cacheUpdated(cityName, "weather");
 
@@ -221,7 +221,7 @@ void WeatherService::onForecastReceived()
         return;
     }
 
-    storeCachedForecast(cityName, forecastData);
+    cacheMgrPtr->storeCachedForecast(cityName, forecastData);
     emit forecastReady(cityName, forecastData);
     emit cacheUpdated(cityName, "forecast");
 
@@ -494,37 +494,7 @@ void WeatherService::emitErrorSafely(const QString& cityName, const QString& mes
 
 void WeatherService::onCacheCleanupTimer()
 {
-    cleanExpiredCache();
+    cacheMgrPtr->cleanExpiredCache();
 }
 
-void WeatherService::cleanExpiredCache()
-{
-    int removed = 0;
 
-    // Nettoyage cache météo
-    auto weatherIt = m_weatherCache.begin();
-    while (weatherIt != m_weatherCache.end()) {
-        if (!weatherIt.value().cacheInfo.isValid()) {
-            weatherIt = m_weatherCache.erase(weatherIt);
-            removed++;
-        } else {
-            ++weatherIt;
-        }
-    }
-
-    // Nettoyage cache prévisions
-    auto forecastIt = m_forecastCache.begin();
-    while (forecastIt != m_forecastCache.end()) {
-        if (!forecastIt.value().cacheInfo.isValid()) {
-            forecastIt = m_forecastCache.erase(forecastIt);
-            removed++;
-        } else {
-            ++forecastIt;
-        }
-    }
-
-    if (removed > 0) {
-        emit cacheCleanedUp(removed);
-        qDebug() << "Auto-cleaned" << removed << "expired cache entries";
-    }
-}

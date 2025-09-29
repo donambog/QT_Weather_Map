@@ -1,9 +1,28 @@
 #include "weathercachemanager.h"
 
-weathercachemanager::weathercachemanager(WeatherCache weatherCache, ForecastCache forcastCache):
-    m_weatherCache(weatherCache),m_forecastCache(forcastCache)
+weathercachemanager::weathercachemanager()
 {
+    qDebug()<<"Initiate a cache manager";
+}
 
+void weathercachemanager::storeCachedWeather(const QString& cityName, const CurrentWeatherData& data)
+{
+    CachedWeatherData cached;
+    cached.weatherData = data;
+    cached.cacheInfo.cachedAt = QDateTime::currentDateTime();
+    cached.cacheInfo.validityMinutes = 15; // 15 minutes
+
+    m_weatherCache[cityName] = cached;
+}
+
+void weathercachemanager::storeCachedForecast(const QString& cityName, const ForecastData& data)
+{
+    CachedForecastData cached;
+    cached.forecastData = data;
+    cached.cacheInfo.cachedAt = QDateTime::currentDateTime();
+    cached.cacheInfo.validityMinutes = 120; // 2 heures
+
+    m_forecastCache[cityName] = cached;
 }
 
 int weathercachemanager::clear()
@@ -13,6 +32,10 @@ int weathercachemanager::clear()
     m_forecastCache.clear();
     qDebug() << "Cache cleared -" << count << "entries removed";
     return count;
+}
+
+CurrentWeatherData weathercachemanager::getCityweatherInCache(const QString& cityName) const{
+    return m_weatherCache[cityName].weatherData;
 }
 
 void weathercachemanager::signalCacheCleared(){

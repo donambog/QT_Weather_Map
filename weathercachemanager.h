@@ -12,17 +12,21 @@ class weathercachemanager:public QObject
 {
     Q_OBJECT
 private:
+    //cache
     WeatherCache m_weatherCache;
     ForecastCache m_forecastCache;
     int clear();
 
 public:
-    weathercachemanager(WeatherCache m_weatherCache, ForecastCache m_forecastCache);
+    weathercachemanager();
 
     // Gestion cache
     void signalCacheCleared();
     int cleanExpiredCache();
     bool isValid(const QString& cityName, const QString& dataType) const;
+    void storeCachedWeather(const QString& cityName, const CurrentWeatherData& data);
+    void storeCachedForecast(const QString& cityName, const ForecastData& data);
+    CurrentWeatherData getCityweatherInCache(const QString& cityName) const;
 
 signals:
     /**

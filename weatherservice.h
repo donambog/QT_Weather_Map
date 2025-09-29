@@ -1,6 +1,11 @@
 #ifndef WEATHERSERVICE_H
 #define WEATHERSERVICE_H
 
+//header
+#include "WeatherData.h"
+#include "weathercachemanager.h"
+
+//std lib
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -12,7 +17,7 @@
 #include <QJsonArray>
 #include <QUrl>
 #include <QUrlQuery>
-#include "WeatherData.h"
+#include <memory>
 
 /**
  * Service principal pour la gestion des données météorologiques
@@ -49,6 +54,9 @@ public:
     void clearCache();
     void clearCacheForCity(const QString& cityName);
     void cleanExpiredCache();
+
+    //cache manager
+    std::unique_ptr<weathercachemanager>cacheMgrPtr;
 
 public slots:
     /**
