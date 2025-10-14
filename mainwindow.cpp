@@ -369,11 +369,11 @@ void MainWindow::onSearchButtonClicked()
         QMessageBox::warning(this, "Attention", "Veuillez entrer un nom de ville");
         return;
     }
-
     m_logDisplay->append(QString("=== Recherche pour: %1 ===").arg(city));
-
     // Demander météo actuelle ET prévisions
+
     m_weatherService->requestCurrentWeather(city);
+
     m_weatherService->requestForecast(city);
 
     m_currentCity = city;

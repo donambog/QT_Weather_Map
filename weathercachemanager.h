@@ -9,11 +9,14 @@
 
 using WeatherCache = QMap<QString, CachedWeatherData>;  // cityName → données+métadata
 using ForecastCache = QMap<QString, CachedForecastData> ;
-class weathercachemanager:public ICacheManager,QObject
+class weathercachemanager:public QObject, ICacheManager
 {
     Q_OBJECT
 private:
-
+    //save the weather
+    WeatherCache m_weatherCache;
+    //save the forecast
+    ForecastCache m_forecastCache;
     int clear();
 
 public:
@@ -22,11 +25,11 @@ public:
     /**
      * Send signal that cache have been cleared
      */
-    void signalCacheCleared();
+    virtual void signalCacheCleared() override;
     /**
      * Clean the cache
      */
-    int cleanExpiredCache();
+    int cleanExpiredCache() override;
     /**
      * check the cache validity
      * param @cityName : name of the city
@@ -38,19 +41,18 @@ public:
      * @param cityName
      * @param CurrentWeatherData
      */
-    void storeCachedWeather(const QString& cityName, const CurrentWeatherData& data);
-    void storeCachedForecast(const QString& cityName, const ForecastData& data);
+    void storeCachedWeather(const QString& cityName, const CurrentWeatherData& data) override;
+    void storeCachedForecast(const QString& cityName, const ForecastData& data) override;
     /**
      * return the weather in cache
      * @param cityName
      * @param returned weather.
      */
-    CurrentWeatherData getCityweatherInCache(const QString& cityName) const;
+    CurrentWeatherData getCityweatherInCache(const QString& cityName) const override;
 
 signals:
     /**
      * Émis lors du nettoyage du cache
-     *
      * @param removedCount Nombre d'entrées supprimées
      */
     void cacheCleanedUp(int removedCount);

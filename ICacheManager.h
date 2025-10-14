@@ -10,15 +10,8 @@ using WeatherCache = QMap<QString, CachedWeatherData>;  // cityName → données
 using ForecastCache = QMap<QString, CachedForecastData> ;
 class ICacheManager
 {
-private:
-    //save the weather
-    WeatherCache m_weatherCache;
-    //save the forecast
-    ForecastCache m_forecastCache;
-    int clear();
-
 public:
-    //virtual weathercachemanager() = 0;
+    virtual ~ICacheManager()=default;
 
     virtual void signalCacheCleared() = 0;
     virtual int cleanExpiredCache() = 0;

@@ -55,7 +55,7 @@ void WeatherService::requestCurrentWeather(const QString& cityName)
         emitErrorSafely(cityName, "Clé API manquante ou invalide", "configuration");
         return;
     }
-
+    qDebug()<<"Nom de la ville333 : "<<cityName<<"\n";
     // Vérification cache d'abord
     if (cacheMgrPtr->isValid(cityName, "weather")) {
         qDebug() << "Cache hit for" << cityName;

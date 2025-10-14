@@ -38,7 +38,7 @@ CurrentWeatherData weathercachemanager::getCityweatherInCache(const QString& cit
     return m_weatherCache[cityName].weatherData;
 }
 
-void weathercachemanager::signalCacheCleared(){
+void weathercachemanager::signalCacheCleared() {
     emit cacheCleanedUp(clear());
 }
 
