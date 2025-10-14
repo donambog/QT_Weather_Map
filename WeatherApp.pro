@@ -17,6 +17,7 @@ SOURCES += \
     weatherservice.cpp
 
 HEADERS += \
+    ICacheManager.h \
     WeatherData.h \
     configloader.h \
     mainwindow.h \
