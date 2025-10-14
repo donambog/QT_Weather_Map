@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QList>
 #include <QMetaType>
-
+#include <Qmap>
 /**
  * Structure pour les données météorologiques actuelles
  * Correspond à la réponse de l'API /weather
@@ -215,6 +215,8 @@ struct CachedForecastData {
     }
 };
 
+using WeatherCache = QMap<QString, CachedWeatherData>;  // cityName → données+métadata
+using ForecastCache = QMap<QString, CachedForecastData> ;
 // Déclarations pour utilisation dans signals/slots Qt
 Q_DECLARE_METATYPE(CurrentWeatherData)
 Q_DECLARE_METATYPE(ForecastData)

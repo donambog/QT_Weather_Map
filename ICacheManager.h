@@ -6,8 +6,6 @@
 #include <Qlist>
 #include <QMap>
 
-using WeatherCache = QMap<QString, CachedWeatherData>;  // cityName → données+métadata
-using ForecastCache = QMap<QString, CachedForecastData> ;
 class ICacheManager
 {
 public:
