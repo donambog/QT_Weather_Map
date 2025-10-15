@@ -37,8 +37,15 @@ class WeatherService : public QObject
     Q_OBJECT
 
 public:
-    explicit WeatherService(QObject* parent = nullptr);
+    explicit WeatherService(std::unique_ptr<ICacheManager> cacheManager, QObject* parent = nullptr);
     ~WeatherService();
+    // cacheManager is not copiable
+    WeatherService(const WeatherService&) = delete;
+    WeatherService& operator=(const WeatherService&) = delete;
+
+    // cacheManager is movable
+    WeatherService(WeatherService&&) = default;
+    WeatherService& operator=(WeatherService&&) = default;
 
     // Configuration API
     void setApiKey(const QString& apiKey);
@@ -55,11 +62,8 @@ public:
     void clearCacheForCity(const QString& cityName);
     void cleanExpiredCache();
 
-    //cache manager
-    std::unique_ptr<weathercachemanager>cacheMgrPtr;
-
 public slots:
-    /**
+    /**std::unique_ptr<weathercachemanager>cacheMgrPtr;
      * Requête météo actuelle pour une ville
      *
      * @param cityName Nom de la ville ("Paris", "London", "New York")
@@ -170,6 +174,8 @@ private:
     QMap<QString, CachedWeatherData> m_weatherCache;  // cityName → données+métadata
     QMap<QString, CachedForecastData> m_forecastCache;
     QTimer* m_cacheCleanupTimer;                      // Nettoyage automatique toutes les heures
+    //Cache manager
+    std::unique_ptr<ICacheManager> cacheMgrPtr;
 
     // === MÉTHODES PRIVÉES ===
 
