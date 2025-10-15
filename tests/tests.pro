@@ -1,5 +1,5 @@
 # tests/tests.pro
-QT += testlib core
+QT += testlib core network    # ✅ AJOUTER network ici !
 QT -= gui
 
 CONFIG += qt console warn_on depend_includepath testcase
@@ -17,19 +17,18 @@ SOURCES += \
     tst_weathercachemanager.cpp
 
 # Code source à tester
-# IMPORTANT : Ne pas inclure main.cpp ni mainwindow (dépendent de QApplication)
+# ✅ NE PAS inclure weatherservice.cpp si vous ne testez que le cache
 SOURCES += \
-    ../src/weathercachemanager.cpp \
-    ../src/configloader.cpp \
-    ../src/weatherservice.cpp
+    ../src/weathercachemanager.cpp
+
+# Si WeatherData.cpp existe, ajoutez-le
+# SOURCES += ../src/WeatherData.cpp
 
 HEADERS += \
     ../src/weathercachemanager.h \
     ../src/ICacheManager.h \
     ../src/WeatherData.h \
-    ../src/weathererrors.h \
-    ../src/configloader.h \
-    ../src/weatherservice.h
+    ../src/weathererrors.h
 
 # Définir les mêmes deprecated warnings
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000

@@ -8,7 +8,7 @@ class TestWeatherCacheManager : public QObject
     Q_OBJECT
 
 private:
-    WeatherCacheManager* m_cache;
+    weathercachemanager * m_cache;
 
     // Méthode utilitaire pour créer des données de test
     CurrentWeatherData createTestWeather(const QString& city, double temp = 20.0) {
@@ -30,7 +30,7 @@ private:
     ForecastData createTestForecast(const QString& city) {
         ForecastData data;
         data.cityName = city;
-        data.countryCode = "FR";
+        //data.countryCode = "FR";
         
         for (int i = 0; i < 5; ++i) {
             ForecastEntry entry;
@@ -52,7 +52,7 @@ private slots:
     }
 
     void init() {
-        m_cache = new WeatherCacheManager();
+        m_cache = new weathercachemanager();
     }
 
     void cleanup() {
@@ -170,7 +170,7 @@ private slots:
 
     void testClearCacheSignal() {
         // ARRANGE
-        QSignalSpy spy(m_cache, &WeatherCacheManager::cacheCleanedUp);
+        QSignalSpy spy(m_cache, &weathercachemanager::cacheCleanedUp);
         QVERIFY(spy.isValid());
         
         m_cache->storeCachedWeather("Paris", createTestWeather("Paris"));
