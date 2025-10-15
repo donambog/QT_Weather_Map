@@ -18,7 +18,7 @@ public:
     virtual void storeCachedWeather(const QString& cityName, const CurrentWeatherData& data) = 0;
     virtual void storeCachedForecast(const QString& cityName, const ForecastData& data) = 0;
     virtual CurrentWeatherData getCityweatherInCache(const QString& cityName) const = 0;
-
+    virtual bool isValid(const QString& cityName, const QString& dataType) const = 0;
 
 };
 #endif // ICACHEMANAGER_H

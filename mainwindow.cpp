@@ -1,5 +1,7 @@
 #include "configloader.h"
 #include "MainWindow.h"
+#include "ICacheManager.h"        // ✅ Majuscules exactes
+#include "weathercachemanager.h"
 #include <QApplication>
 #include <QMessageBox>
 #include <QDateTime>
@@ -13,9 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUI();
     setupStatusBar();
-
+    //Initialisation de cache
+    std::unique_ptr<ICacheManager> cacheManager = std::make_unique<weathercachemanager>();
     // Initialisation du service météo
-    m_weatherService = new WeatherService(this);
+    m_weatherService = new WeatherService(std::move(cacheManager));
 
     // Set the API key
     // Charge la cle par json

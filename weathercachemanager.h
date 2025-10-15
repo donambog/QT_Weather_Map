@@ -9,7 +9,7 @@
 
 using WeatherCache = QMap<QString, CachedWeatherData>;  // cityName → données+métadata
 using ForecastCache = QMap<QString, CachedForecastData> ;
-class weathercachemanager:public QObject, ICacheManager
+class weathercachemanager:public QObject, public ICacheManager
 {
     Q_OBJECT
 private:
@@ -25,7 +25,7 @@ public:
     /**
      * Send signal that cache have been cleared
      */
-    virtual void signalCacheCleared() override;
+    void signalCacheCleared() override;
     /**
      * Clean the cache
      */
@@ -35,7 +35,7 @@ public:
      * param @cityName : name of the city
      * param @dataType : weather or forecast
      */
-    bool isValid(const QString& cityName, const QString& dataType) const;
+    bool isValid(const QString& cityName, const QString& dataType) const override;
     /**
      * store the weater
      * @param cityName

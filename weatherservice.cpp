@@ -5,12 +5,13 @@
 #include <QNetworkRequest>
 #include <QTimer>
 
-WeatherService::WeatherService(QObject* parent)
+WeatherService::WeatherService(std::unique_ptr<ICacheManager> cacheManager, QObject* parent)
     : QObject(parent)
     , m_baseUrl("https://api.openweathermap.org/data/2.5")
     , m_requestTimeoutMs(10000)
     , m_networkManager(nullptr)
     , m_cacheCleanupTimer(nullptr)
+    , cacheMgrPtr(std::move(cacheManager))
 {
     // Initialisation du gestionnaire réseau
     m_networkManager = new QNetworkAccessManager(this);
