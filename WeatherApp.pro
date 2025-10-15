@@ -1,34 +1,11 @@
-QT       += core gui network charts
+# WeatherApp.pro (racine - projet SUBDIRS)
+TEMPLATE = subdirs
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+SUBDIRS += \
+    src \
+    tests
 
-CONFIG += c++17
+# Les tests dépendent du code source
+tests.depends = src
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-SOURCES += \
-    configloader.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    weathercachemanager.cpp \
-    weatherchartwidget.cpp \
-    weatherservice.cpp
-
-HEADERS += \
-    ICacheManager.h \
-    WeatherData.h \
-    configloader.h \
-    mainwindow.h \
-    weathercachemanager.h \
-    weatherchartwidget.h \
-    weathererrors.h \
-    weatherservice.h
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
-DISTFILES +=
+CONFIG += ordered
